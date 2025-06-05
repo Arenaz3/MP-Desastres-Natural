@@ -1,6 +1,6 @@
+import { HandHelping, Heart, LogIn, MapPin, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, MapPin, HandHelping, Menu, X, LogIn } from 'lucide-react';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,7 +10,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed w-full bg-white shadow-md z-50">
+    <nav className="fixed top-0 left-0 w-full bg-white shadow-md z-[500]">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center space-x-2">
@@ -34,7 +34,7 @@ const Navbar = () => {
             </Link>
             <Link to="/admin" className="flex items-center text-gray-700 hover:text-blue-600 transition-colors">
               <LogIn className="h-5 w-5 mr-1" />
-              <span>Entrar/Cadastrar</span>
+              <span>Admin</span>
             </Link>
           </div>
           
@@ -56,7 +56,7 @@ const Navbar = () => {
       
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-white shadow-lg">
+        <div className="md:hidden bg-white shadow-lg z-[9998]">
           <div className="container mx-auto px-4 py-3 space-y-3">
             <Link
               to="/"
@@ -95,7 +95,7 @@ const Navbar = () => {
             >
               <div className="flex items-center">
                 <LogIn className="h-5 w-5 mr-2" />
-                <span>Entrar/Cadastrar</span>
+                <span>Admin</span>
               </div>
             </Link>
           </div>
