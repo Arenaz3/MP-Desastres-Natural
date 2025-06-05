@@ -1,0 +1,14 @@
+homePage:
+- disastres
+  - id
+  - title
+  - description
+  - date
+  - active
+  - location
+- donations
+  - id
+  - requester
+  - category
+  - location
+  - date

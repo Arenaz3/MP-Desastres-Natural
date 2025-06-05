@@ -1,46 +1,11 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Calendar, Filter } from 'lucide-react';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import DisasterCard from '../components/DisasterCard';
 import MapPlaceholder from '../components/MapPlaceholder';
 import Select from '../components/Select';
-
-// Mock data for disasters
-const mockDisasters = [
-  {
-    id: '1',
-    title: 'Enchente no Vale do Taquari',
-    location: 'Rio Grande do Sul',
-    date: '05/06/2023',
-    description: 'Fortes chuvas causaram enchentes em diversas cidades no Vale do Taquari, afetando milhares de moradores.',
-    active: true
-  },
-  {
-    id: '2',
-    title: 'Deslizamento em Petrópolis',
-    location: 'Rio de Janeiro',
-    date: '15/02/2024',
-    description: 'Deslizamento de terra após chuvas intensas causou destruição em várias áreas da cidade histórica.',
-    active: true
-  },
-  {
-    id: '3',
-    title: 'Seca no Pantanal',
-    location: 'Mato Grosso do Sul',
-    date: '20/08/2023',
-    description: 'Período de seca prolongada causou impactos severos na fauna e flora do Pantanal, além de afetar comunidades ribeirinhas.',
-    active: false
-  },
-  {
-    id: '4',
-    title: 'Rompimento de Barragem',
-    location: 'Minas Gerais',
-    date: '10/03/2024',
-    description: 'Rompimento parcial de barragem em distrito mineiro causou evacuação de centenas de famílias da região.',
-    active: true
-  }
-];
+import {Disaster} from "../models/Disaster.ts";
 
 const disasterTypes = [
   { value: 'enchente', label: 'Enchente' },
@@ -70,6 +35,14 @@ const HomePage = () => {
   const [disasterType, setDisasterType] = useState('');
   const [region, setRegion] = useState('');
   const [dateRange, setDateRange] = useState('');
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:8080/api/desastres')
+        .then(response => response.json())
+        .then(json => setData(element => json.map(element.id, element.title, element.location, element.date, element.description, element.active)))
+        .then(error => console.error(error))
+  })
 
   const handleDisasterClick = (disaster: typeof mockDisasters[0]) => {
     setSelectedDisaster(disaster);
@@ -78,7 +51,7 @@ const HomePage = () => {
   return (
     <div className="py-6">
       <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">Mapa de Desastres e Áreas Afetadas</h1>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Left Sidebar - Filters */}
         <div className="lg:col-span-1 space-y-4">
@@ -87,7 +60,7 @@ const HomePage = () => {
               <Filter className="h-5 w-5 mr-2 text-blue-600" />
               Filtros
             </h2>
-            
+
             <div className="space-y-4">
               <div>
                 <label htmlFor="disasterType" className="block text-sm font-medium text-gray-700 mb-1">
@@ -100,7 +73,7 @@ const HomePage = () => {
                   onChange={(e) => setDisasterType(e.target.value)}
                 />
               </div>
-              
+
               <div>
                 <label htmlFor="region" className="block text-sm font-medium text-gray-700 mb-1">
                   Região/UF
@@ -112,7 +85,7 @@ const HomePage = () => {
                   onChange={(e) => setRegion(e.target.value)}
                 />
               </div>
-              
+
               <div>
                 <label htmlFor="dateRange" className="block text-sm font-medium text-gray-700 mb-1">
                   Período
@@ -124,33 +97,33 @@ const HomePage = () => {
                   onChange={(e) => setDateRange(e.target.value)}
                 />
               </div>
-              
+
               <Button variant="primary" isFullWidth>
                 Aplicar Filtros
               </Button>
             </div>
           </Card>
         </div>
-        
+
         {/* Map Area */}
         <div className="lg:col-span-2">
           <MapPlaceholder height="h-[400px]" />
         </div>
-        
+
         {/* Right Sidebar - Selected Disaster */}
         <div className="lg:col-span-1">
           <Card className="h-[400px] flex flex-col">
             <h3 className="text-xl font-bold text-gray-900">{selectedDisaster.title}</h3>
-            
+
             <div className="flex items-center text-gray-600 mt-2">
               <Calendar className="h-4 w-4 mr-1" />
               <span className="text-sm">{selectedDisaster.date}</span>
             </div>
-            
+
             <div className="mt-4 flex-grow">
               <p className="text-gray-700">{selectedDisaster.description}</p>
             </div>
-            
+
             <div className="mt-4 space-y-2">
               <Button variant="primary" isFullWidth>
                 Ver mais detalhes
@@ -162,27 +135,27 @@ const HomePage = () => {
           </Card>
         </div>
       </div>
-      
+
       {/* Recent Disasters Section */}
       <div className="mt-12">
         <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
           <Calendar className="h-6 w-6 mr-2 text-blue-600" />
           Desastres Recentes
         </h2>
-        
+
         <div className="grid grid-cols-1 gap-4">
-          {mockDisasters.map((disaster) => (
+          {data ? <pre>{data.map((disaster) => (
             <DisasterCard
-              key={disaster.id}
-              title={disaster.title}
-              location={disaster.location}
-              date={disaster.date}
-              description={disaster.description}
-              isActive={disaster.active}
-              onClick={() => handleDisasterClick(disaster)}
-              horizontal
+                key={disaster.id}
+                title={disaster.title}
+                location={disaster.location}
+                date={disaster.date}
+                description={disaster.description}
+                isActive={disaster.active}
+                onClick={() => handleDisasterClick(disaster)}
+                horizontal
             />
-          ))}
+          ))}</pre> : "loading..."}
         </div>
       </div>
     </div>
