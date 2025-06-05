@@ -82,7 +82,7 @@ Para administradores:
 	•	João Góes – Frontend e estrutura do banco
 	•	Vinícius Baptista – Backend Java + Swagger
 	•	Júlia Alves – Wireframe e apresentação comercial
-
+	•	Frederico Garcia – Documentação e Arquitetura
 
 📄 Licença
 
